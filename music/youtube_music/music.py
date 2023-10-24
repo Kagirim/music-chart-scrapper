@@ -16,6 +16,11 @@ class TYMScraper():
         time.sleep(2)
 
     def get_songs(self):
+        # accept cookies
+        WebDriverWait(self.driver, 10).until(expected_conditions.presence_of_element_located((By.XPATH, "//button[@id='onetrust-accept-btn-handler']")))
+        self.driver.find_element(By.XPATH, "//button[@id='onetrust-accept-btn-handler']")
+        time.sleep(1)
+
         # get the div with class="chart-table style-scope ytmc-chart-table"
         songs_div = self.driver.find_element(By.XPATH, "//div[@class='chart-table style-scope ytmc-chart-table']")
 

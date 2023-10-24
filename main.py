@@ -14,13 +14,14 @@ import pandas as pd
 
 def youtube_music():
     url = 'https://music.youtube.com/playlist?list=PL4fGSI1pDJn6OYkZx1Yd3kzV7eQzYXk7w'
-    driver = get_chromedriver()
+    # driver = get_chromedriver()
+    driver = proxy_request()
     tym = TYMScraper(url, driver)
 
     # save the songs to a csv file
     songs = tym.songs
     df = pd.DataFrame(songs)
-    df.to_csv('songs.csv', index=False)
+    df.to_csv('data/youtube_songs.csv', index=False)
     
 
 def deezer():
@@ -34,7 +35,7 @@ def deezer():
 
     # save the songs to a csv file
     df = pd.DataFrame(page_source, columns=['Song', 'Artist', 'Album', 'Duration'])
-    df.to_csv('deezer_songs.csv', index=False)
+    df.to_csv('data/deezer_songs.csv', index=False)
 
 def sound_cloud():
     url = 'https://soundcloud.com/charts/top?genre=all-music&country=US'
@@ -47,7 +48,7 @@ def sound_cloud():
 
     # save the songs to a csv file
     df = pd.DataFrame(page_source)
-    df.to_csv('soundcloud_songs.csv', index=False)
+    df.to_csv('data/soundcloud_songs.csv', index=False)
 
 def melon():
     url = 'https://www.melon.com/chart/week/index.htm'
@@ -60,7 +61,7 @@ def melon():
 
     # save the songs to a csv file
     df = pd.DataFrame(page_source)
-    df.to_csv('melon_songs.csv', index=False)
+    df.to_csv('data/melon_songs.csv', index=False)
 
 def spotify():
     url = 'https://charts.spotify.com/home'
@@ -73,14 +74,30 @@ def spotify():
 
     # save the songs to a csv file
     df = pd.DataFrame(page_source)
-    df.to_csv('spotify_songs.csv', index=False)
+    df.to_csv('data/spotify_songs.csv', index=False)
 
 def main():
-    # youtube_music()
-    # deezer()
-    # sound_cloud()
-    # melon()
-    spotify()
+    try:
+        youtube_music()
+    except:
+        print("problem scraping youtube music")
+    try:
+        deezer()
+    except:
+        print("problem scraping deezer")
+    try:
+        sound_cloud()
+    except:
+        print("problem scraping soundcloud")
+    try:
+        melon()
+    except:
+        print("problem scraping melon")
+    try:
+        spotify()
+    except:
+        print("problem scraping spotify")
+        
 
 if __name__ == '__main__':
     main()
