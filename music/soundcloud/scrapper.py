@@ -48,5 +48,5 @@ class SoundCloudScrapper():
             if current_pos == self.driver.execute_script("return window.pageYOffset;"):
                 break
 
-        return song_list
+        return list(set(song_list))
         
