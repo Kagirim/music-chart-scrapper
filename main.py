@@ -8,6 +8,7 @@ from proxy.proxy_list.free_proxies import proxy_request
 from music.soundcloud.scrapper import SoundCloudScrapper
 from music.melon.scrapper import MelonScrapper
 from music.spotify.scrapper import SpotifyScrapper
+from linkedin.scrapper import LinkedinScrapper
 import time
 import pandas as pd
 
@@ -76,27 +77,41 @@ def spotify():
     df = pd.DataFrame(page_source)
     df.to_csv('data/spotify_songs.csv', index=False)
 
+def linkedin():
+    url = "https://www.linkedin.com/search/results/companies/?companyHqGeo=%5B%22103644278%22%5D&industryCompanyVertical=%5B%2241%22%5D&origin=FACETED_SEARCH&sid=phq"
+    driver = proxy_request()
+    driver.maximize_window()
+    
+    time.sleep(5)
+    li = LinkedinScrapper(url, driver)
+    li.get_companies()
+
 def main():
+    # try:
+    #     youtube_music()
+    # except:
+    #     print("problem scraping youtube music")
+    # try:
+    #     deezer()
+    # except:
+    #     print("problem scraping deezer")
+    # try:
+    #     sound_cloud()
+    # except:
+    #     print("problem scraping soundcloud")
+    # try:
+    #     melon()
+    # except:
+    #     print("problem scraping melon")
+    # try:
+    #     spotify()
+    # except:
+    #     print("problem scraping spotify")
     try:
-        youtube_music()
-    except:
-        print("problem scraping youtube music")
-    try:
-        deezer()
-    except:
-        print("problem scraping deezer")
-    try:
-        sound_cloud()
-    except:
-        print("problem scraping soundcloud")
-    try:
-        melon()
-    except:
-        print("problem scraping melon")
-    try:
-        spotify()
-    except:
-        print("problem scraping spotify")
+        linkedin()
+    except Exception as e:
+        print("problem scraping linkedin")
+        print(e)
         
 
 if __name__ == '__main__':
