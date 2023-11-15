@@ -110,8 +110,12 @@ def ceo_cleaner():
     df = pd.read_excel('data/csv/CEOs Pres and VPs.xlsx')
     df = df.rename(columns = {'Unnamed: 24': 'linkedin'})
     df = df.dropna(axis=1, how='all')
-        
-    df = df[df['Industry'].str.contains("Banks", regex=False, na=False)]
+
+    # select rows the banks or Financial Services in the Industry column
+    df = df[df['Industry'].str.contains("Bank|Financial Services", regex=True, na=False)]
+
+    # drop duplicates in the Company Name column
+    df = df.drop_duplicates(subset=['Company Name'], keep='first')
     
     # merge first name and second name, address and city, state, zip
     df['Exec_name'] = df[['First Name', 'Last Name']].apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
@@ -122,8 +126,7 @@ def ceo_cleaner():
     bank_data.reset_index(drop=True, inplace=True)
     
     # save the data to csv
-    # bank_data.to_csv("data/csv/bank_Pres_VPs.csv")
-    print(bank_data)
+    bank_data.to_csv("data/csv/bank_Pres_VPs.csv")
 
 def us_bank_merged():
     df1 = pd.read_csv('data/csv/bank_Pres_VPs.csv')
@@ -155,7 +158,7 @@ def crunchbasecos():
     df1 = pd.read_csv('data/csv/crunchbase organizations.csv')
     
     # get banks only from the short description if it contains the word bank or financial
-    df1 = df1[df1['short_description'].str.contains("bank|financial", regex=True, na=False)]
+    df1 = df1[df1['short_description'].str.contains("bank|financial|finance|banking|investment", regex=True, na=False)]
 
     df1 = df1[['name', 'type','cb_url', 'domain', 'homepage_url', 'facebook_url', 'twitter_url', 'linkedin_url', 'city', 'region', 'country_code',]]
 
